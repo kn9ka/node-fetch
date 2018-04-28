@@ -22,14 +22,14 @@ const INTERNALS = Symbol('Response internals');
 export default class Response {
 	constructor(body = null, opts = {}) {
 		Body.call(this, body, opts);
-
 		const status = opts.status || 200;
 
 		this[INTERNALS] = {
 			url: opts.url,
 			status,
 			statusText: opts.statusText || STATUS_CODES[status],
-			headers: new Headers(opts.headers)
+			headers: new Headers(opts.headers),
+			socket: opts.socket || null
 		};
 	}
 
@@ -55,7 +55,9 @@ export default class Response {
 	get headers() {
 		return this[INTERNALS].headers;
 	}
-
+	get socket() {
+		return this[INTERNALS].socket
+	}
 	/**
 	 * Clone this response
 	 *
@@ -67,7 +69,8 @@ export default class Response {
 			status: this.status,
 			statusText: this.statusText,
 			headers: this.headers,
-			ok: this.ok
+			ok: this.ok,
+			socket: this.socket
 		});
 
 	}
@@ -81,7 +84,8 @@ Object.defineProperties(Response.prototype, {
 	ok: { enumerable: true },
 	statusText: { enumerable: true },
 	headers: { enumerable: true },
-	clone: { enumerable: true }
+	clone: { enumerable: true },
+	socket: { enumerable: true }
 });
 
 Object.defineProperty(Response.prototype, Symbol.toStringTag, {

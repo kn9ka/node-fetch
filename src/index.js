@@ -145,9 +145,9 @@ export default function fetch(url, opts) {
 				statusText: res.statusMessage,
 				headers: headers,
 				size: request.size,
-				timeout: request.timeout
+				timeout: request.timeout,
+				socket: res.socket
 			};
-
 			// HTTP-network fetch step 12.1.1.3
 			const codings = headers.get('Content-Encoding');
 
@@ -199,6 +199,7 @@ export default function fetch(url, opts) {
 			}
 
 			// otherwise, use response as-is
+
 			resolve(new Response(body, response_options));
 		});
 
